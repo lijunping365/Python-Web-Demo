@@ -1,14 +1,36 @@
-import traceback
+import datetime
+import json
 from typing import Optional, TypeVar, Generic
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request as HttpRequest
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 T = TypeVar('T')
 
 
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
+        if isinstance(obj, bytes):
+            return str(obj, encoding='utf-8')
+        if isinstance(obj, int):
+            return int(obj)
+        elif isinstance(obj, float):
+            return float(obj)
+        else:
+            return super(CustomEncoder, self).default(obj)
+
+
 class ServerException(Exception):
-    msg: str
+    # 初始化
+    def __init__(self, message):
+        self.message = message
+
+    # 类一般返回值
+    def __str__(self):
+        return "服务异常:" + self.message
 
 
 class Request(BaseModel):
@@ -66,10 +88,24 @@ async def query(request: Request):
         print(f'结果， {res}')
         result.success(data=title)
     except Exception as e:
-        print(e)
-        result.error(str(e))
+        # print(e)
+        # result.error(str(e))
+        raise ServerException(str(e))
 
     return result
+
+
+@server.exception_handler(ServerException)
+async def exception_handler(request: HttpRequest, exc: ServerException):
+    print(f"服务异常：{request.method} {request.url}")
+    print(exc)
+    result = Result()
+    result.error(exc.message)
+    print(type(result))  # result 是个对象
+    # 直接 return JSONResponse(content=result) 或 return JSONResponse(content=json.dumps(result)) 都会报错
+    # 报 TypeError: Object of type Result is not JSON serializable，
+    # 我们这里先把响应结果转为json，再去格式化响应内容。
+    return JSONResponse(content=result.json())
 
 
 # This is a sample Python script.
