@@ -105,7 +105,8 @@ async def exception_handler(request: HttpRequest, exc: ServerException):
     # 直接 return JSONResponse(content=result) 或 return JSONResponse(content=json.dumps(result)) 都会报错
     # 报 TypeError: Object of type Result is not JSON serializable，
     # 我们这里先把响应结果转为json，再去格式化响应内容。
-    return JSONResponse(content=result.json())
+    # 这里最终转为 dict 返回
+    return JSONResponse(content=json.loads(result.json()))
 
 
 # This is a sample Python script.
