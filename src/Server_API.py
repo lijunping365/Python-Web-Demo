@@ -17,8 +17,14 @@ class Result(BaseModel, Generic[T]):
     data: T = None
 
     def success(self, data: T):
+        self.code = 200
+        self.msg = "success"
         self.data = data
-        return self
+
+    def error(self, msg: str):
+        self.code = 1000
+        self.msg = msg
+        self.data = None
 
 
 server = FastAPI()
@@ -37,7 +43,26 @@ async def query(request: Request):
     print(f'Hi, {title}, {page}')
 
     result = Result[str]()
-    result = result.success(data=title)
+    result.success(data=title)
+
+    return result
+
+
+@server.post('/api', response_model=Result)
+async def query(request: Request):
+    title = request.title
+    page = request.page
+
+    print(f'Hi, {title}, {page}')
+    result = Result[str]()
+
+    try:
+        res = 10 / page
+        print(f'结果， {res}')
+        result.success(data=title)
+    except Exception as e:
+        print(e)
+        result.error("未知错误")
 
     return result
 
