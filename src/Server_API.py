@@ -1,9 +1,14 @@
+import traceback
 from typing import Optional, TypeVar, Generic
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 T = TypeVar('T')
+
+
+class ServerException(Exception):
+    msg: str
 
 
 class Request(BaseModel):
@@ -62,7 +67,7 @@ async def query(request: Request):
         result.success(data=title)
     except Exception as e:
         print(e)
-        result.error("未知错误")
+        result.error(str(e))
 
     return result
 
