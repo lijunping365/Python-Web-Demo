@@ -13,3 +13,7 @@ json.loads()         #将JSON中的字符串对象转换为Python中的对象
 
 
 https://blog.csdn.net/qq_38122800/article/details/125491933
+
+## FastAPI 官网
+
+https://fastapi.tiangolo.com/tutorial/cors/

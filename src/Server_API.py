@@ -5,6 +5,7 @@ import uvicorn
 from fastapi import FastAPI, Request as HttpRequest
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 T = TypeVar('T')
 
@@ -55,6 +56,14 @@ class Result(BaseModel, Generic[T]):
 
 
 server = FastAPI()
+
+server.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
 
 
 @server.get("/test")
