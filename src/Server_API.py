@@ -7,6 +7,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.service import UserService
+
 T = TypeVar('T')
 
 
@@ -102,6 +104,18 @@ async def query(request: Request):
         raise ServerException(str(e))
 
     return result
+
+
+@server.get("/getUser")
+async def get_user():
+    try:
+        user_service = UserService()
+        query_result = user_service.select_user_list()
+        result = Result()
+        result.success(data=query_result)
+        return result
+    except Exception as e:
+        raise ServerException(str(e))
 
 
 @server.exception_handler(ServerException)
