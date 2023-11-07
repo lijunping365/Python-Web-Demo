@@ -22,3 +22,14 @@ https://fastapi.tiangolo.com/tutorial/cors/
 ## BaseModel 用法
 
 https://blog.csdn.net/Tester_muller/article/details/132908057
+
+
+## pypi
+
+https://pypi.org/project/pydantic/
+
+## pip 命令
+
+pip install -r requirements.txt
+
+pip install   -r requirements.txt  -i https://mirrors.aliyun.com/pypi/simple/
