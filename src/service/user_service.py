@@ -12,7 +12,7 @@ class UserService:
 
     def select_user_list(self) -> List[User]:
         # 定义查询sql语句
-        select_sql = 'SELECT * FROM open_idea_user WHERE username="lijunping"'
+        select_sql = 'SELECT * FROM tb_user WHERE username="lijunping"'
         # 接收查询结果
         query_result: List[User] = self.db.select_db(select_sql)
         print(query_result)
@@ -20,7 +20,7 @@ class UserService:
 
     def insert_user(self, user: User):
         # 定义查询sql语句
-        sql = "INSERT INTO open_idea_user (username, create_time) VALUES ('%s', '%s');"
+        sql = "INSERT INTO tb_user (username, create_time) VALUES ('%s', '%s');"
         time = str(datetime.datetime.now())
         data = (user.username, time)
         self.db.select_db(sql % data)

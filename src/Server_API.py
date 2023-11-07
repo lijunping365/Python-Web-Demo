@@ -119,11 +119,11 @@ async def get_user():
         raise ServerException(str(e))
 
 
-@server.get("/createUser")
+@server.post("/createUser")
 async def create_user(user: User):
     try:
         user_service = UserService()
-        user_service.insert_user()
+        user_service.insert_user(user)
         result = Result()
         result.success(data=None)
         return result
