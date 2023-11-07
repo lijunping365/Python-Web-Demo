@@ -1,12 +1,13 @@
 import datetime
 import json
-from typing import Optional, TypeVar, Generic
+from typing import Optional, TypeVar, Generic, List
 import uvicorn
 from fastapi import FastAPI, Request as HttpRequest
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.model import User
 from src.service import UserService
 
 T = TypeVar('T')
@@ -110,9 +111,21 @@ async def query(request: Request):
 async def get_user():
     try:
         user_service = UserService()
-        query_result = user_service.select_user_list()
+        query_result: List[User] = user_service.select_user_list()
         result = Result()
         result.success(data=query_result)
+        return result
+    except Exception as e:
+        raise ServerException(str(e))
+
+
+@server.get("/createUser")
+async def create_user(user: User):
+    try:
+        user_service = UserService()
+        user_service.insert_user()
+        result = Result()
+        result.success(data=None)
         return result
     except Exception as e:
         raise ServerException(str(e))
