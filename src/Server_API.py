@@ -3,6 +3,7 @@ import json
 from typing import Optional, TypeVar, Generic, List
 import uvicorn
 from fastapi import FastAPI, Request as HttpRequest
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -144,6 +145,20 @@ async def exception_handler(request: HttpRequest, exc: ServerException):
     # 这里最终转为 dict 返回
     return JSONResponse(content=json.loads(result.json()))
 
+
+# 捕获参数 验证错误
+@server.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: HttpRequest, exc: RequestValidationError):
+    print(f"服务异常：{request.method} {request.url}")
+    print(exc)
+    result = Result()
+    result.error(exc.body)
+    print(type(result))  # result 是个对象
+    # 直接 return JSONResponse(content=result) 或 return JSONResponse(content=json.dumps(result)) 都会报错
+    # 报 TypeError: Object of type Result is not JSON serializable，
+    # 我们这里先把响应结果转为json，再去格式化响应内容。
+    # 这里最终转为 dict 返回
+    return JSONResponse(content=json.loads(result.json()))
 
 # This is a sample Python script.
 

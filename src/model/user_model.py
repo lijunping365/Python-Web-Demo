@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
-    id: int
-    username: str
-    password: str
+    id: Optional[int]
+    username: str = Field(..., min_length=3)
+    password: Optional[str]

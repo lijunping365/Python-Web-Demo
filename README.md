@@ -17,3 +17,8 @@ https://blog.csdn.net/qq_38122800/article/details/125491933
 ## FastAPI 官网
 
 https://fastapi.tiangolo.com/tutorial/cors/
+
+
+## BaseModel 用法
+
+https://blog.csdn.net/Tester_muller/article/details/132908057
