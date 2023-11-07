@@ -23,4 +23,4 @@ class UserService:
         sql = "INSERT INTO tb_user (username, create_time) VALUES ('%s', '%s');"
         time = str(datetime.datetime.now())
         data = (user.username, time)
-        self.db.select_db(sql % data)
+        self.db.change_db(sql % data)

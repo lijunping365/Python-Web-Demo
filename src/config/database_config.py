@@ -2,7 +2,9 @@ import pymysql
 import configparser
 from pymysql.cursors import DictCursor
 
-config_path = 'D:/project/open/Open-AI/Python-Web-Demo/src/config.ini'
+# config_path = 'D:/project/open/Open-AI/Python-Web-Demo/src/config.ini'
+
+config_path = 'D:/self/open/Python-Web-Demo/src/config.ini'
 
 
 class DatabaseConfig:
